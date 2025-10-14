@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['Cube-3x3']
+
+roboflow:
+  workspace: chhunheng
+  project: cube-ujgya
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/chhunheng/cube-ujgya/dataset/2

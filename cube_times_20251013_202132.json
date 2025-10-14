@@ -1,0 +1,31 @@
+{
+  "session_start": "2025-10-13T20:22:02.452914",
+  "groups_of_three": [
+    {
+      "group_number": 1,
+      "cubes": [
+        {
+          "color": "blue",
+          "face_name": "Direita",
+          "individual_time": 5.612721681594849,
+          "timestamp": "2025-10-13T20:22:01.520180"
+        },
+        {
+          "color": "red",
+          "face_name": "Encima",
+          "individual_time": 0.4347805976867676,
+          "timestamp": "2025-10-13T20:22:02.017070"
+        },
+        {
+          "color": "white",
+          "face_name": "Frente",
+          "individual_time": 0.3438091278076172,
+          "timestamp": "2025-10-13T20:22:02.452262"
+        }
+      ],
+      "total_group_time": 6.391311407089233,
+      "timestamp": "2025-10-13T20:22:02.452290"
+    }
+  ],
+  "total_groups": 1
+}

@@ -1,0 +1,13 @@
+train: ./train/images
+val: ./valid/images
+test: ./test/images
+
+nc: 1
+names: ['cubos']
+
+roboflow:
+  workspace: renaut-transformation-day
+  project: cube-cq71e-4qrrs
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/renaut-transformation-day/cube-cq71e-4qrrs/dataset/2
