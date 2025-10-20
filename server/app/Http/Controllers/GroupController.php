@@ -27,7 +27,7 @@ class GroupController extends Controller
         return response()->json($group);
     }
 
-    public function AverageByColor($color)
+    public function averageByColor($color)
     {
         $cubes = Cube::where('color', $color)->pluck('individual_time');
 
@@ -46,6 +46,91 @@ class GroupController extends Controller
             'color' => $color,
             'average_individual_time' => $average
         ]);
+    }
+
+    public function delayed()
+    {
+        $groups = GroupOfThree::with('cubes')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $delayed = [];
+
+        foreach ($groups as $group) {
+            if ($group->group_time > 10) {
+                $maxCube = $group->cubes->sortByDesc('individual_time')->first();
+                $diff = ($group->group_time) - 10;
+
+                $delayed[] = [
+                    'type' => 'high_time',
+                    'message' => 'Grupo com tempo acima do esperado.',
+                    'group_id' => $group->id,
+                    'group_time' => $group->group_time,
+                    'cube' => [
+                        'id' => $maxCube->id,
+                        'color' => $maxCube->color,
+                        'face' => $maxCube->face,
+                        'individual_time' => $maxCube->individual_time,
+                        'diff' => $diff
+                    ]
+                ];
+            }
+        }
+
+        return response()->json($delayed);
+    }
+
+    public function early(){
+        $groups = GroupOfThree::with('cubes')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $early = [];
+
+        foreach ($groups as $group) {
+            if ($group->group_time < 2) {
+                $minCube = $group->cubes->sortBy('individual_time')->first();
+                $diff = 2 - $group->group_time;
+
+                $early[] = [
+                    'type' => 'low_time',
+                    'message' => 'Grupo com tempo abaixo do esperado.',
+                    'group_id' => $group->id,
+                    'group_time' => $group->group_time,
+                    'cube' => [
+                        'id' => $minCube->id,
+                        'color' => $minCube->color,
+                        'face' => $minCube->face,
+                        'individual_time' => $minCube->individual_time,
+                        'diff' => $diff
+                    ]
+                ];
+            }
+        }
+
+        return response()->json($early);
+    }
+
+    public function notifications()
+    {
+        $delayed = $this->Delayed()->getData();
+        $early = $this->early()->getData();
+
+        $allNotifications = array_merge($delayed, $early);
+
+        usort($allNotifications, function ($a, $b) {
+            return $b->group_id <=> $a->group_id;
+        });
+
+        return response()->json($allNotifications);
+    }
+
+    public function latestGroupTimes(){
+        $groupTimes = GroupOfThree::orderBy('created_at', 'desc')
+            ->take(7)
+            ->get(['id', 'group_time']);
+
+        return response()->json($groupTimes);
     }
 
     public function store(Request $request)
